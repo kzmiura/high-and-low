@@ -18,11 +18,11 @@ class CardTable:
         pass
 
     def draw(self) -> None:
-        pyxel.cls(pyxel.COLOR_GREEN)
+        pyxel.rect((pyxel.width - self.WIDTH) / 2, (pyxel.height - self.HEIGHT) / 4, self.WIDTH, self.HEIGHT, pyxel.COLOR_GREEN)
         for i, card in enumerate(self.layout):
             card.draw(
                 (pyxel.width - PlayingCard.WIDTH) / 2 + 32 * (1 - 2 * i),
-                (pyxel.height - PlayingCard.HEIGHT) / 2,
+                (pyxel.height - PlayingCard.HEIGHT) / 3,
             )
 
     def draw_stock(self) -> None:

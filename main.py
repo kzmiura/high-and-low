@@ -111,7 +111,7 @@ class App:
 
     def draw_message(self, *message: str) -> None:
         for i, message in enumerate(message):
-            pyxel.text((pyxel.width - 4 * len(message)) / 2, 8 * (i + 1), message, pyxel.COLOR_BLACK)
+            pyxel.text((pyxel.width - 4 * len(message)) / 2, 8 * (i + 1), message, pyxel.COLOR_WHITE)
 
     def check_guessing(self, guessing_high: bool) -> None:
         self.is_won = self.table.check_rank(guessing_high)
