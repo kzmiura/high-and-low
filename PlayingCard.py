@@ -18,8 +18,11 @@ class PlayingCard:
         if isinstance(suit, Suit) and isinstance(rank, int) and 1 <= rank <= 13 and isinstance(reversed, bool):
             self.suit = suit
             self.rank = rank
-            self.color = pyxel.COLOR_RED if suit in (
-                Suit.HEART, Suit.DIAMOND) else pyxel.COLOR_BLACK
+            match self.suit:
+                case Suit.HEART | Suit.DIAMOND:
+                    self.color = pyxel.COLOR_RED
+                case Suit.CLUB | Suit.SPADE:
+                    self.color = pyxel.COLOR_BLACK
             self.reversed = reversed
         else:
             raise ValueError("Invalid arguments")
