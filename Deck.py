@@ -1,7 +1,6 @@
-from PlayingCard import PlayingCard, Suit
-
-
 import random
+
+from PlayingCard import PlayingCard, Suit
 
 
 class Deck:

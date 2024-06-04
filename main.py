@@ -1,4 +1,5 @@
 import enum
+
 import pyxel
 
 from CardTable import CardTable
@@ -100,18 +101,30 @@ class App:
             case State.GUESSING:
                 self.draw_message("Higher or Lower?")
             case State.REVEALING:
-                self.draw_message("Won!" if self.is_won else "Lose", "Press Enter to continue")
+                self.draw_message(
+                    "Won!" if self.is_won else "Lose", "Press Enter to continue"
+                )
 
     def draw_game_over(self) -> None:
         self.draw_center("Game Over")
         self.draw_message("Press Enter to return to the title")
 
     def draw_center(self, title: str) -> None:
-        pyxel.text((pyxel.width - 4 * len(title)) / 2, pyxel.height / 2, title, pyxel.COLOR_WHITE)
+        pyxel.text(
+            (pyxel.width - 4 * len(title)) / 2,
+            pyxel.height / 2,
+            title,
+            pyxel.COLOR_WHITE
+        )
 
     def draw_message(self, *message: str) -> None:
         for i, message in enumerate(message):
-            pyxel.text((pyxel.width - 4 * len(message)) / 2, 8 * (i + 1), message, pyxel.COLOR_WHITE)
+            pyxel.text(
+                (pyxel.width - 4 * len(message)) / 2,
+                8 * (i + 1),
+                message,
+                pyxel.COLOR_WHITE
+            )
 
     def check_guessing(self, guessing_high: bool) -> None:
         self.is_won = self.table.check_rank(guessing_high)

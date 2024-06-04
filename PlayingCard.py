@@ -1,8 +1,5 @@
 import enum
-<<<<<<< HEAD
-=======
-import random
->>>>>>> refs/remotes/origin/main
+
 import pyxel
 
 
@@ -21,7 +18,8 @@ class PlayingCard:
         if isinstance(suit, Suit) and isinstance(rank, int) and 1 <= rank <= 13 and isinstance(reversed, bool):
             self.suit = suit
             self.rank = rank
-            self.color = pyxel.COLOR_RED if suit in (Suit.HEART, Suit.DIAMOND) else pyxel.COLOR_BLACK
+            self.color = pyxel.COLOR_RED if suit in (
+                Suit.HEART, Suit.DIAMOND) else pyxel.COLOR_BLACK
             self.reversed = reversed
         else:
             raise ValueError("Invalid arguments")
@@ -31,11 +29,7 @@ class PlayingCard:
 
     def __repr__(self) -> str:
         return f"PlayingCard({self.suit}, {self.rank})"
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> refs/remotes/origin/main
     def __eq__(self, other) -> bool:
         if not isinstance(other, PlayingCard):
             raise ValueError("Invalid comparison")
@@ -46,14 +40,8 @@ class PlayingCard:
             pyxel.blt(x, y, pyxel.images[0], 48, 32, 48, 80, pyxel.COLOR_BLACK)
             return
         pyxel.blt(x, y, pyxel.images[0], 0, 32, 48, 80, pyxel.COLOR_BLACK)
-<<<<<<< HEAD
-        pyxel.text(
-            x + self.WIDTH / 2, y + self.HEIGHT / 2, self.rank_to_str(), self.color
-        )
-=======
         pyxel.text(x + self.WIDTH / 2, y + self.HEIGHT /
                    2, self.rank_to_str(), self.color)
->>>>>>> refs/remotes/origin/main
         self._draw_suit(x + 4, y + 4)
 
     def _draw_suit(self, x, y) -> None:
@@ -85,25 +73,3 @@ class PlayingCard:
                 return "K"
             case _:
                 return str(self.rank)
-
-
-<<<<<<< HEAD
-=======
-class Deck:
-    def __init__(self) -> None:
-        self.cards = [
-            PlayingCard(suit, rank) for suit in Suit for rank in range(1, 14)
-        ]
-
-    def shuffle(self) -> None:
-        random.shuffle(self.cards)
-
-    def draw_card(self) -> PlayingCard:
-        return self.cards.pop()
-
-    def __len__(self) -> int:
-        return len(self.cards)
-
-    def __str__(self) -> str:
-        return "\n".join(map(str, self.cards))
->>>>>>> refs/remotes/origin/main
