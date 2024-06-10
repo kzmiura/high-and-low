@@ -3,8 +3,7 @@
 This is a game made with [Pyxel](https://github.com/kitao/pyxel)
 ## How to Play
 ### Run Browser
-~~Coming soon...~~
-[Click here](https://kitao.github.io/pyxel/wasm/launcher/?run=kzmiura.high-and-low.main)
+[Click here](https://kitao.github.io/pyxel/wasm/launcher/?play=kzmiura.high-and-low.build.high-and-low)
 ### Run local
 1. Clone repo
     ```bash
