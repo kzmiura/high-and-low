@@ -15,17 +15,14 @@ class PlayingCard:
     HEIGHT = 80
 
     def __init__(self, suit: Suit, rank: int, reversed: bool = True) -> None:
-        if isinstance(suit, Suit) and isinstance(rank, int) and 1 <= rank <= 13 and isinstance(reversed, bool):
-            self.suit = suit
-            self.rank = rank
-            match self.suit:
-                case Suit.HEART | Suit.DIAMOND:
-                    self.color = pyxel.COLOR_RED
-                case Suit.CLUB | Suit.SPADE:
-                    self.color = pyxel.COLOR_BLACK
-            self.reversed = reversed
-        else:
-            raise ValueError("Invalid arguments")
+        if not (isinstance(suit, Suit) and isinstance(rank, int) and isinstance(reversed, bool)):
+            raise TypeError
+        if not 1 <= rank <= 13:
+            raise ValueError
+        self.suit, self.rank, self.reversed = suit, rank, reversed
+        # autopep8: off
+        self.color = pyxel.COLOR_RED if suit in (Suit.HEART, Suit.DIAMOND) else pyxel.COLOR_BLACK
+        # autopep8: on
 
     def __str__(self) -> str:
         return f"{self.rank_to_str():2>} of {self.suit.name}"
@@ -35,16 +32,25 @@ class PlayingCard:
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, PlayingCard):
-            raise ValueError("Invalid comparison")
-        return self.suit == other.suit and self.rank == other.rank
+            raise NotImplemented
+        return self.rank == other.rank
+
+    def __lt__(self, other) -> bool:
+        if not isinstance(other, PlayingCard):
+            raise NotImplemented
+        return self.rank < other.rank
 
     def draw(self, x, y) -> None:
         if self.reversed:
             pyxel.blt(x, y, pyxel.images[0], 48, 32, 48, 80, pyxel.COLOR_BLACK)
             return
         pyxel.blt(x, y, pyxel.images[0], 0, 32, 48, 80, pyxel.COLOR_BLACK)
-        pyxel.text(x + self.WIDTH / 2, y + self.HEIGHT /
-                   2, self.rank_to_str(), self.color)
+        pyxel.text(
+            x + self.WIDTH / 2,
+            y + self.HEIGHT / 2,
+            self.rank_to_str(),
+            self.color
+        )
         self._draw_suit(x + 4, y + 4)
 
     def _draw_suit(self, x, y) -> None:

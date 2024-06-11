@@ -28,11 +28,10 @@ class CardTable:
             )
 
     def draw_stock(self) -> None:
-        self.layout.append(self.stock.draw_card())
+        drawed_card = self.stock.draw_card()
+        self.layout.append(drawed_card)
         if len(self.layout) > 2:
             self.layout.pop(0)
 
     def check_rank(self, guessing_high: bool) -> bool:
-        if self.layout[1].rank == self.layout[0].rank:
-            return False
-        return (self.layout[1].rank > self.layout[0].rank) == guessing_high
+        return False if self.layout[1] == self.layout[0] else (self.layout[1] > self.layout[0]) is guessing_high

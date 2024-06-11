@@ -20,7 +20,7 @@ class State(enum.Enum):
 class App:
     def __init__(self) -> None:
         pyxel.init(256, 192)
-        pyxel.load("./my_resource.pyxres")
+        pyxel.load("../res/my_resource.pyxres")
         self.scene = Scene.TITLE
         pyxel.run(self.update, self.draw)
 
@@ -43,18 +43,20 @@ class App:
             case Scene.GAME_OVER:
                 self.draw_game_over()
 
-    def start(self) -> None:
+    def initiate_table(self) -> None:
+        self.score = 0
+        self.health = 3
         self.state = State.STARTING
         self.table = CardTable()
 
     def update_title(self) -> None:
         if pyxel.btnp(pyxel.KEY_RETURN):
             self.scene = Scene.GAME
-            self.start()
+            self.initiate_table()
 
     def update_game(self) -> None:
-        if not self.table.stock:
-            self.scene = Scene.GAME_OVER
+        if not self.table.stock or self.health <= 0:
+            self.game_over()
             return
         match self.state:
             case State.STARTING:
@@ -95,6 +97,8 @@ class App:
 
     def draw_game(self) -> None:
         self.table.draw()
+        self.draw_score()
+        self.draw_health()
         match self.state:
             case State.STARTING:
                 self.draw_message("Press Enter to draw a card")
@@ -104,6 +108,14 @@ class App:
                 self.draw_message(
                     "Won!" if self.is_won else "Lose", "Press Enter to continue"
                 )
+
+    def draw_score(self) -> None:
+        pyxel.text(8, 8, f"Score: {self.score:>6}", pyxel.COLOR_WHITE)
+
+    def draw_health(self) -> None:
+        for i in range(self.health):
+            pyxel.blt(8, 16 * (i + 1), pyxel.images[0], 16, 0, 8, 16, pyxel.COLOR_WHITE)
+            pyxel.blt(8 + 8, 16 * (i + 1), pyxel.images[0], 16, 0, -8, 16, pyxel.COLOR_WHITE)
 
     def draw_game_over(self) -> None:
         self.draw_center("Game Over")
@@ -126,9 +138,13 @@ class App:
                 pyxel.COLOR_WHITE
             )
 
+    def game_over(self) -> None:
+        self.scene = Scene.GAME_OVER
+
     def check_guessing(self, guessing_high: bool) -> None:
         self.is_won = self.table.check_rank(guessing_high)
-
+        if not self.is_won:
+            self.health -= 1
 
 if __name__ == "__main__":
     App()
