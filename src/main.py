@@ -23,11 +23,6 @@ class App:
         pyxel.init(256, 192)
         pyxel.load("../res/my_resource.pyxres")
         self.scene = Scene.TITLE
-        self.score = 0
-        self.base_score = 100
-        self.score_ratio = 1
-        self.health = 3
-        self.level = 1
 
         pyxel.run(self.update, self.draw)
 
@@ -54,14 +49,22 @@ class App:
             case Scene.GAME_OVER:
                 self.draw_game_over()
 
+    def start_game(self) -> None:
+        self.score = 0
+        self.base_score = 100
+        self.score_ratio = 1
+        self.health = 3
+        self.level = 1
+        self.initiate_table()
+        self.scene = Scene.GAME
+
     def initiate_table(self) -> None:
         self.state = State.STARTING
         self.table = CardTable()
 
     def update_title(self) -> None:
         if pyxel.btnp(pyxel.KEY_RETURN):
-            self.scene = Scene.GAME
-            self.initiate_table()
+            self.start_game()
 
     def update_game(self) -> None:
         if not self.table.stock or self.health <= 0:
