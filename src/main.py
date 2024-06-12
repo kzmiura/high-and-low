@@ -8,6 +8,7 @@ from CardTable import CardTable
 class Scene(enum.Enum):
     TITLE = enum.auto()
     GAME = enum.auto()
+    SHOP = enum.auto()
     GAME_OVER = enum.auto()
 
 
@@ -22,6 +23,12 @@ class App:
         pyxel.init(256, 192)
         pyxel.load("../res/my_resource.pyxres")
         self.scene = Scene.TITLE
+        self.score = 0
+        self.base_score = 100
+        self.score_ratio = 1
+        self.health = 3
+        self.level = 1
+
         pyxel.run(self.update, self.draw)
 
     def update(self) -> None:
@@ -30,6 +37,8 @@ class App:
                 self.update_title()
             case Scene.GAME:
                 self.update_game()
+            case Scene.SHOP:
+                self.update_shop()
             case Scene.GAME_OVER:
                 self.update_game_over()
 
@@ -40,12 +49,12 @@ class App:
                 self.draw_title()
             case Scene.GAME:
                 self.draw_game()
+            case Scene.SHOP:
+                self.draw_shop()
             case Scene.GAME_OVER:
                 self.draw_game_over()
 
     def initiate_table(self) -> None:
-        self.score = 0
-        self.health = 3
         self.state = State.STARTING
         self.table = CardTable()
 
@@ -58,6 +67,8 @@ class App:
         if not self.table.stock or self.health <= 0:
             self.game_over()
             return
+        if self.score >= sum((500 * (i + 1) for i in range(self.level))):
+            self.level_clear()
         match self.state:
             case State.STARTING:
                 self.update_starting()
@@ -88,6 +99,11 @@ class App:
             self.table.draw_stock()
             self.state = State.GUESSING
 
+    def update_shop(self) -> None:
+        if pyxel.btnp(pyxel.KEY_RETURN):
+            self.initiate_table()
+            self.scene = Scene.GAME
+
     def update_game_over(self) -> None:
         if pyxel.btnp(pyxel.KEY_RETURN):
             self.scene = Scene.TITLE
@@ -97,8 +113,7 @@ class App:
 
     def draw_game(self) -> None:
         self.table.draw()
-        self.draw_score()
-        self.draw_health()
+        self.draw_ui()
         match self.state:
             case State.STARTING:
                 self.draw_message("Press Enter to draw a card")
@@ -109,13 +124,31 @@ class App:
                     "Won!" if self.is_won else "Lose", "Press Enter to continue"
                 )
 
-    def draw_score(self) -> None:
-        pyxel.text(8, 8, f"Score: {self.score:>6}", pyxel.COLOR_WHITE)
-
-    def draw_health(self) -> None:
+    def draw_ui(self) -> None:
+        # Draw score
+        pyxel.text(8, 8, f"Score: {self.score:>4}", pyxel.COLOR_WHITE)
+        # Draw level
+        pyxel.text(8, 16, f"Level: {self.level:>4}", pyxel.COLOR_WHITE)
+        # Draw health
         for i in range(self.health):
-            pyxel.blt(8, 16 * (i + 1), pyxel.images[0], 16, 0, 8, 16, pyxel.COLOR_WHITE)
-            pyxel.blt(8 + 8, 16 * (i + 1), pyxel.images[0], 16, 0, -8, 16, pyxel.COLOR_WHITE)
+            pyxel.blt(
+                pyxel.width - 20 * (i + 1),
+                4,
+                pyxel.images[0],
+                16, 0, 8, 16,
+                pyxel.COLOR_WHITE
+            )
+            pyxel.blt(
+                pyxel.width - 20 * (i + 1) + 8,
+                4,
+                pyxel.images[0],
+                16, 0, -8, 16,
+                pyxel.COLOR_WHITE
+            )
+
+    def draw_shop(self) -> None:
+        self.draw_center("Shop")
+        self.draw_message("Press Enter to return to the game")
 
     def draw_game_over(self) -> None:
         self.draw_center("Game Over")
@@ -141,10 +174,19 @@ class App:
     def game_over(self) -> None:
         self.scene = Scene.GAME_OVER
 
+    def level_clear(self) -> None:
+        self.level += 1
+        self.health += 1
+        self.scene = Scene.SHOP
+
     def check_guessing(self, guessing_high: bool) -> None:
-        self.is_won = self.table.check_rank(guessing_high)
-        if not self.is_won:
+        result = self.table.is_result_high()
+        self.is_won = False if result is None else result is guessing_high
+        if self.is_won:
+            self.score += self.base_score * self.score_ratio
+        else:
             self.health -= 1
+
 
 if __name__ == "__main__":
     App()

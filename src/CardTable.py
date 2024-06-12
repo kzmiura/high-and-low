@@ -33,5 +33,5 @@ class CardTable:
         if len(self.layout) > 2:
             self.layout.pop(0)
 
-    def check_rank(self, guessing_high: bool) -> bool:
-        return False if self.layout[1] == self.layout[0] else (self.layout[1] > self.layout[0]) is guessing_high
+    def is_result_high(self) -> bool:
+        return None if self.layout[1] == self.layout[0] else self.layout[1] > self.layout[0]
