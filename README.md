@@ -8,7 +8,7 @@ This is a playing card game made with [Pyxel](https://github.com/kitao/pyxel)
 
 ### Run Browser
 
-[Click here](https://kitao.github.io/pyxel/wasm/launcher/?play=kzmiura.high-and-low.build.high-and-low)
+Coming soon...
 
 ### Run local
 
