@@ -1,8 +1,8 @@
 # High and Low
 
-## Discription
+## Description
 
-This is a game made with [Pyxel](https://github.com/kitao/pyxel)
+This is a playing card game made with [Pyxel](https://github.com/kitao/pyxel)
 
 ## How to Play
 
@@ -27,9 +27,9 @@ This is a game made with [Pyxel](https://github.com/kitao/pyxel)
 
 ## Rule
 
-Predict whether the rank of the face-down card is higher or lower than the rank of the card drawn.
+Guess whether the rank of the face-down card is higher or lower than the rank of the card drawn.
 
 ## Keys
 
-- (H): Predict higher
-- (L): Predict lower
+- (H): Guess higher
+- (L): Guess lower
